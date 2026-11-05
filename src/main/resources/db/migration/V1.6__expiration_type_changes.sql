@@ -1,0 +1,3 @@
+ALTER TABLE url
+ALTER COLUMN expiration TYPE DATE
+USING expiration::DATE;

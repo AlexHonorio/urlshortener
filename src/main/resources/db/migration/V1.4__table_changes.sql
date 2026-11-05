@@ -1,0 +1,1 @@
+ALTER TABLE url DROP COLUMN "short_link";

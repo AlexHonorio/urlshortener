@@ -1,0 +1,1 @@
+ALTER TABLE url RENAME COLUMN "linkPassword" TO "link_password"
