@@ -42,9 +42,9 @@ function App() {
     return cookie ? decodeURIComponent(cookie.split('=')[1]) : null;
   }
 
-  
+
   const encurtarLink = async () => {
-    if(!link.trim()){
+    if (!link.trim()) {
       setError("Enter a valid HTTP or HTTPS URL");
       return;
     }
@@ -53,53 +53,65 @@ function App() {
     setError("");
     setShortLink("");
 
-    try{
-      await fetch("http://localhost:8080/encurtar", {
-        method: "GET",
-        credentials: "include",
-      })
+    try {
+      // Solicita o token CSRF
+      const csrfResponse = await fetch(
+        `${import.meta.env.VITE_API_URL}/auth/csrf`,
+        {
+          method: "GET",
+          credentials: "include",
+        }
+      );
+
+      if (!csrfResponse.ok) {
+        throw new Error("Não foi possível obter o token CSRF.");
+      }
 
       const csrfToken = obterCsrfToken();
 
-      if(!csrfToken){
+      if (!csrfToken) {
         throw new Error("Não foi possível obter o token de segurança.");
-
       }
 
-      const response = await fetch("http://localhost:8080/shorten", {
-        method: "POST",
-        credentials: "include",
-        headers: {
-          "Content-Type": "application/json",
-          "X-XSRF-TOKEN": csrfToken,
-        },
-        body: JSON.stringify({
-          url: link.trim(),
-          expiration: null,
-        }),
-
-      });
+      // Envia a URL para o backend
+      const response = await fetch(
+        `${import.meta.env.VITE_API_URL}/shorten`,
+        {
+          method: "POST",
+          credentials: "include",
+          headers: {
+            "Content-Type": "application/json",
+            "X-XSRF-TOKEN": csrfToken,
+          },
+          body: JSON.stringify({
+            url: link.trim(),
+            expiration: null,
+          }),
+        }
+      );
 
       const data = await response.json();
 
-      if(!response.ok){
-        throw new Error(data.message || "Não foi possível encurtar o link.");
+      if (!response.ok) {
+        throw new Error(
+          data.message || "Não foi possível encurtar o link."
+        );
       }
 
-      setShortLink(data.shortUrl);  
+      setShortLink(data.shortUrl);
 
-    } catch(error) {
+    } catch (error) {
       console.error("Erro ao encurtar o link: ", error);
 
       setError(
-        error instanceof Error ? error.message : "Ocorreu um erro ao encurtar o link."
+        error instanceof Error
+          ? error.message
+          : "Ocorreu um erro ao encurtar o link."
       );
 
     } finally {
       setLoading(false);
     }
-
-
   };
 
 
