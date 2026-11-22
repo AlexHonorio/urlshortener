@@ -22,7 +22,6 @@ import java.util.Map;
 
 @RestController
 @RequiredArgsConstructor
-//@RequestMapping("/url") REMOVI PARA QUE O LINK FIQUE MAIS LEGIVEL
 public class UrlController {
 
     private final UrlService urlService;
