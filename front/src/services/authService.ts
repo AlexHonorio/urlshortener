@@ -7,6 +7,17 @@ interface RegisterData {
     password: string;
 }
 
+interface LoginData {
+  userEmail: string;
+  password: string;
+}
+
+export interface UserResponse {
+  userId: number;
+  userName: string;
+  userEmail: string;
+}
+
 interface ApiError {
     message?: string;
 }
@@ -60,4 +71,31 @@ export async function userRegister(data: RegisterData): Promise<void> {
             errorData.message || "Não foi possível realizar o cadastro."
         );
     }
+}
+
+
+export async function loginUser(dados: LoginData): Promise<UserResponse> {
+    const csrfToken = await obterNovoCsrfToken();
+
+    const response = await fetch(`${API_URL}/auth/login`, {
+        method: "POST",
+        credentials: "include",
+        headers: {
+        "Content-Type": "application/json",
+        "X-XSRF-TOKEN": csrfToken,
+        },
+        body: JSON.stringify(dados),
+    });
+
+    if (!response.ok) {
+        const errorData: ApiError = await response.json().catch(() => ({}));
+
+        throw new Error(
+        errorData.message || "Não foi possível realizar o login."
+        );
+    }
+
+    const user: UserResponse = await response.json();
+
+    return user;
 }

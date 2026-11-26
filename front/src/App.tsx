@@ -3,9 +3,12 @@ import "./App.css";
 import "./index.css";
 import { useState } from "react";
 import UserRegister from "./components/userRegister";
+import { loginUser } from "./services/authService";
+import Login from "./components/userLogin";
 
 function App() {
   const [mostrarCadastro, setMostrarCadastro] = useState(false);
+  const [mostrarLogin, setMostrarLogin] = useState(false);
   const [link, setLink] = useState("");
   const [shortLink, setShortLink] = useState("");
   const [copied, setCopied] = useState(false);
@@ -145,6 +148,12 @@ function App() {
       </div>
     );
   }
+
+  if (mostrarLogin) {
+  return (
+    <Login onVoltar={() => setMostrarLogin(false)} />
+  );
+}
   
   
 
@@ -168,9 +177,24 @@ function App() {
           Encurtador de Links
         </h1>
 
-        <button
-          onClick={() => setMostrarCadastro(true)}
-          className="
+        <div className="flex gap-1">
+
+          <button
+            onClick={() => setMostrarLogin(true)}
+            className="bg-[#1C2B3E]
+            text-white
+            px-4
+            py-2
+            rounded-md
+            hover:bg-[#3C678E]
+            transition-colors"
+          >
+            Entrar
+          </button>
+
+          <button
+            onClick={() => setMostrarCadastro(true)}
+            className="
             bg-[#1C2B3E]
             px-4
             py-2
@@ -179,8 +203,17 @@ function App() {
             hover:bg-[#243e5c]
             transition-colors"
           >
-          Criar conta
-        </button>
+            Criar conta
+          </button>
+
+
+
+        </div>
+
+
+        
+
+        
 
       </div>
 
