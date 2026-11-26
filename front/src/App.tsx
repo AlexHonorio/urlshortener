@@ -2,14 +2,16 @@ import "tailwindcss";
 import "./App.css";
 import "./index.css";
 import { useState } from "react";
+import UserRegister from "./components/userRegister";
 
 function App() {
-
+  const [mostrarCadastro, setMostrarCadastro] = useState(false);
   const [link, setLink] = useState("");
   const [shortLink, setShortLink] = useState("");
   const [copied, setCopied] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+  
 
   const colarLink = async () => {
     try{
@@ -115,6 +117,34 @@ function App() {
   };
 
 
+
+  if (mostrarCadastro) {
+    return (
+      <div className="min-h-screen bg-[#ccdae0] flex flex-col relative">
+        
+        <button
+          onClick={() => setMostrarCadastro(false)}
+          className="
+          absolute
+          top-4
+          left-4
+          z-10
+          bg-[#1C2B3E] 
+          text-white
+          px-4
+          py-2
+          rounded-md
+          hover:bg-[#3C678E]
+          transition-colors"
+        >
+          ← Voltar
+        </button>
+        
+
+        <UserRegister />
+      </div>
+    );
+  }
   
   
 
@@ -123,19 +153,35 @@ function App() {
     <div className="h-screen bg-[#ccdae0] flex flex-col items-center" >
 
       <div className="
-        h-24
+        min-h-24
         w-full
-        text-5xl
-        text-center
-        flex
-        flex-col
-        items-center
-        justify-center
+        px-6
         bg-[#3C678E]
         text-white
+        flex
+        items-center
+        justify-between
         "
       >
-        <h1 className="font-fira-sans">Encurtador de Links</h1>
+
+        <h1 className="font-fira-sans text-3xl md:text-5xl">
+          Encurtador de Links
+        </h1>
+
+        <button
+          onClick={() => setMostrarCadastro(true)}
+          className="
+            bg-[#1C2B3E]
+            px-4
+            py-2
+            rounded-md
+            cursor-pointer
+            hover:bg-[#243e5c]
+            transition-colors"
+          >
+          Criar conta
+        </button>
+
       </div>
 
     
