@@ -89,6 +89,8 @@ public class SecurityConfig {
                 .csrf(csrf -> csrf.spa())
 
                 .authorizeHttpRequests(auth -> auth
+
+                        .requestMatchers("/auth/me").authenticated()
                         .requestMatchers("/auth/**").permitAll()
                         .anyRequest().permitAll()
                 )
